@@ -7,29 +7,27 @@ jobs:
   inspect:
     runs-on: ubuntu-latest
     steps:
-      - run: pip install requests remotezip pandas openpyxl
-      - name: Inspect capture metadata and archive
+      - run: pip install requests remotezip pandas openpyxl scipy h5py
+      - name: Inspect recordings
         run: |
           python - <<'PY'
-          import io, requests, pandas as pd
+          import io, requests, pandas as pd, scipy.io as sio
           from remotezip import RemoteZip
-          article=requests.get("https://api.figshare.com/v2/articles/28541225", timeout=60)
-          article.raise_for_status()
-          files=article.json()["files"]
-          for f in files:
-              print("FILE",f["name"],f["size"],f["download_url"], flush=True)
-          for f in files:
-              if f["name"].lower().endswith(".xlsx"):
-                  response=requests.get(f["download_url"], timeout=120)
-                  response.raise_for_status()
-                  df=pd.read_excel(io.BytesIO(response.content))
-                  print("COLUMNS",list(df.columns), "ROWS",len(df),flush=True)
-                  print(df.head(5).to_string(),flush=True)
-                  for c in df.columns:
-                      if any(s in c.lower() for s in ["application","enviro","people","date","person"]):
-                          print("VALUES",c,df[c].value_counts(dropna=False).head(30).to_string(),flush=True)
-              if f["name"].lower().endswith(".zip"):
-                  with RemoteZip(f["download_url"], timeout=120) as z:
-                      names=z.namelist()
-                      print("ZIP",len(names),names[:20],flush=True)
+          files=requests.get("https://api.figshare.com/v2/articles/28541225").json()["files"]
+          x=next(f for f in files if f["name"]=="Summary.xlsx")
+          zf=next(f for f in files if f["name"]=="EHUNAM.zip")
+          df=pd.read_excel(io.BytesIO(requests.get(x["download_url"]).content))
+          pc=df[df.Application.isin(["PC","E"])]
+          print("GROUPS", pc.groupby(["Enviroment","Date","N_People"]).Original_File.nunique().to_string(), flush=True)
+          print("SAMPLE",pc[pc.Application=="PC"].head(10).to_string(),flush=True)
+          with RemoteZip(zf["download_url"],timeout=120) as z:
+              row=pc[pc.Application=="PC"].iloc[0]
+              print("READING",row.File,flush=True)
+              data=z.read(row.File)
+              print("SIZE",len(data),flush=True)
+              try:
+                  m=sio.loadmat(io.BytesIO(data))
+                  print("MAT",[(k,getattr(v,"shape",None),getattr(v,"dtype",None)) for k,v in m.items()],flush=True)
+              except Exception as e:
+                  print("MAT ERROR",repr(e),flush=True)
           PY
