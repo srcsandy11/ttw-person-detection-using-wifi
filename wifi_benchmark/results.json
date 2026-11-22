@@ -1,0 +1,120 @@
+{
+  "model": "L2 logistic regression, learning rate 0.1, 3000 iterations, L2 0.01",
+  "threshold": 0.5,
+  "duplicate_check": "zero exact feature-vector matches between every pair of splits",
+  "note": "Overlapping windows are correlated; session-level results reflect one vote per recording.",
+  "features": [
+    "rx1_mean_profile_mean",
+    "rx1_mean_profile_std",
+    "rx1_mean_profile_median",
+    "rx1_temporal_std_mean",
+    "rx1_temporal_std_median",
+    "rx1_temporal_std_max",
+    "rx1_temporal_absdiff_mean",
+    "rx1_temporal_diff_std",
+    "rx1_baseline_abs_mean",
+    "rx1_baseline_abs_median",
+    "rx1_baseline_abs_max",
+    "rx1_baseline_rmse",
+    "rx1_baseline_corr"
+  ],
+  "splits": {
+    "train": {
+      "sessions": 12,
+      "windows": 1452,
+      "window_metrics": {
+        "tn": 600,
+        "fp": 5,
+        "fn": 43,
+        "tp": 804,
+        "accuracy": 0.9669421487603306,
+        "balanced_accuracy": 0.9704840613931522,
+        "occupied_precision": 0.9938195302843016,
+        "occupied_recall": 0.9492325855962219,
+        "empty_false_positive_rate": 0.008264462809917356,
+        "occupied_f1": 0.9710144927536232
+      },
+      "session_metrics": {
+        "tn": 5,
+        "fp": 0,
+        "fn": 0,
+        "tp": 7,
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "occupied_precision": 1.0,
+        "occupied_recall": 1.0,
+        "empty_false_positive_rate": 0.0,
+        "occupied_f1": 1.0
+      }
+    },
+    "val": {
+      "sessions": 9,
+      "windows": 1089,
+      "window_metrics": {
+        "tn": 242,
+        "fp": 0,
+        "fn": 34,
+        "tp": 813,
+        "accuracy": 0.9687786960514233,
+        "balanced_accuracy": 0.9799291617473436,
+        "occupied_precision": 1.0,
+        "occupied_recall": 0.9598583234946871,
+        "empty_false_positive_rate": 0.0,
+        "occupied_f1": 0.9795180722891567
+      },
+      "session_metrics": {
+        "tn": 2,
+        "fp": 0,
+        "fn": 0,
+        "tp": 7,
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "occupied_precision": 1.0,
+        "occupied_recall": 1.0,
+        "empty_false_positive_rate": 0.0,
+        "occupied_f1": 1.0
+      }
+    },
+    "test": {
+      "sessions": 9,
+      "windows": 1089,
+      "window_metrics": {
+        "tn": 242,
+        "fp": 0,
+        "fn": 47,
+        "tp": 800,
+        "accuracy": 0.9568411386593205,
+        "balanced_accuracy": 0.9722550177095632,
+        "occupied_precision": 1.0,
+        "occupied_recall": 0.9445100354191264,
+        "empty_false_positive_rate": 0.0,
+        "occupied_f1": 0.9714632665452337
+      },
+      "session_metrics": {
+        "tn": 2,
+        "fp": 0,
+        "fn": 0,
+        "tp": 7,
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "occupied_precision": 1.0,
+        "occupied_recall": 1.0,
+        "empty_false_positive_rate": 0.0,
+        "occupied_f1": 1.0
+      }
+    }
+  },
+  "permutation_control": {
+    "iterations": 50,
+    "seed": 20261122,
+    "unit": "entire training session",
+    "description": "Shuffle training session labels, fit same model, score against unshuffled test labels. Empty/nonempty session counts preserved.",
+    "window_balanced_accuracy_mean": 0.44577331759149935,
+    "window_balanced_accuracy_min": 0.13695395513577333,
+    "window_balanced_accuracy_max": 0.9138134592680047,
+    "window_balanced_accuracy_at_least_actual_count": 0,
+    "session_balanced_accuracy_mean": 0.44428571428571423,
+    "session_balanced_accuracy_min": 0.07142857142857142,
+    "session_balanced_accuracy_max": 1.0
+  }
+}
