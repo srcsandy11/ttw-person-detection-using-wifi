@@ -1,0 +1,41 @@
+name: HomeOccupancy session holdout
+
+on:
+  push:
+    paths:
+      - 'benchmarks/home_occupancy.py'
+      - '.github/workflows/home-occupancy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install benchmark dependencies
+        run: python -m pip install numpy==2.2.6 scipy==1.15.3 scikit-learn==1.6.1 joblib==1.5.0 threadpoolctl==3.6.0
+      - name: Download the nine pinned source files
+        shell: bash
+        run: |
+          mkdir -p "${RUNNER_TEMP}/home-occupancy"
+          base_url=$(PYTHONPATH=benchmarks python -c 'from home_occupancy import BASE_URL; print(BASE_URL)')
+          for category in empty sleep work; do
+            for session in 1 2 3; do
+              file="${category}_${session}.csv"
+              curl --fail --location --max-time 180 --retry 3 --retry-all-errors \
+                --silent --show-error --output "${RUNNER_TEMP}/home-occupancy/${file}" "${base_url}/${file}"
+            done
+          done
+      - name: Train and evaluate room occupancy
+        run: python -u benchmarks/home_occupancy.py "${RUNNER_TEMP}/home-occupancy" home-occupancy-metrics.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: home-occupancy-metrics
+          path: home-occupancy-metrics.json
