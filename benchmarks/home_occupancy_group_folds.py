@@ -1,6 +1,7 @@
 """Three recording-group holdouts on HomeOccupancy; exploratory, not an untouched test."""
 import argparse
 import json
+import joblib
 from pathlib import Path
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
@@ -10,6 +11,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("data_dir", type=Path)
     p.add_argument("output", type=Path)
+    p.add_argument("--model-output", type=Path, required=True)
     args = p.parse_args()
     sessions = {}
     for cls in CLASSES:
@@ -28,6 +30,9 @@ def main():
         model = RandomForestClassifier(n_estimators=300, max_depth=12,
             min_samples_leaf=8, class_weight="balanced", random_state=SEED, n_jobs=2)
         model.fit(X, y)
+        if held_out == 3:
+            args.model_output.parent.mkdir(parents=True, exist_ok=True)
+            joblib.dump(model, args.model_output)
         per_session = {}
         fold_y, fold_p, fold_probs = [], [], []
         for name, (_, label, x, counts) in test:
