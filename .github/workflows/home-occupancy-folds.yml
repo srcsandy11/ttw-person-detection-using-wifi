@@ -1,0 +1,45 @@
+name: Exploratory HomeOccupancy group folds
+
+on:
+  push:
+    paths:
+      - '.github/workflows/home-occupancy-folds.yml'
+      - 'benchmarks/home_occupancy_group_folds.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.2.6 scipy==1.15.3 scikit-learn==1.6.1 joblib==1.5.0 threadpoolctl==3.6.0
+      - name: Download pinned recordings
+        shell: bash
+        run: |
+          mkdir -p "${RUNNER_TEMP}/home-occupancy"
+          base_url=$(PYTHONPATH=benchmarks python -c 'from home_occupancy import BASE_URL; print(BASE_URL)')
+          for category in empty sleep work; do
+            for session in 1 2 3; do
+              file="${category}_${session}.csv"
+              curl --fail --location --max-time 180 --retry 3 --retry-all-errors --silent --show-error --output "${RUNNER_TEMP}/home-occupancy/${file}" "${base_url}/${file}"
+            done
+          done
+      - name: Train and evaluate three grouped folds
+        run: python -u benchmarks/home_occupancy_group_folds.py "${RUNNER_TEMP}/home-occupancy" home-occupancy-folds.json --model-output home-occupancy-fold3.joblib
+      - name: Verify exported model inference
+        run: |
+          python benchmarks/predict_home_occupancy.py "${RUNNER_TEMP}/home-occupancy/work_3.csv" home-occupancy-fold3.joblib predictions.json
+          python -c 'import json; p=json.load(open("predictions.json")); assert len(p["windows"]) == 755; assert sum(w["occupied"] for w in p["windows"]) == 597'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: home-occupancy-group-folds
+          path: |
+            home-occupancy-folds.json
+            home-occupancy-fold3.joblib

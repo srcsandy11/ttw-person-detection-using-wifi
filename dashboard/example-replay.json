@@ -1,0 +1,13 @@
+{
+  "source": "simulated",
+  "rooms": [
+    {"id": "room-a", "name": "Room A"},
+    {"id": "room-b", "name": "Room B"}
+  ],
+  "readings": [
+    {"room_id": "room-a", "observed_at": "2026-01-01T09:00:00Z", "occupied": false},
+    {"room_id": "room-b", "observed_at": "2026-01-01T09:00:00Z", "occupied": true},
+    {"room_id": "room-a", "observed_at": "2026-01-01T09:01:00Z", "occupied": true},
+    {"room_id": "room-b", "observed_at": "2026-01-01T09:02:00Z", "occupied": false}
+  ]
+}

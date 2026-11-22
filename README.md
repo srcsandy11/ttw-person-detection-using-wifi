@@ -16,4 +16,8 @@ OPENBLAS_NUM_THREADS=1 python wifi_benchmark/benchmark.py
 
 The training script exports local model weights and a JSON report. Download permissions and data provenance are described in the [experiment notes](wifi_benchmark/README.md). The checked-in [evaluation results](wifi_benchmark/results.json) include held-out session scores and 50 shuffled-label controls.
 
-Review the [audit of the original project](docs/original-experiment-review.md) and the [dataset catalog and two-room test plan](docs/occupancy-datasets.md) before interpreting performance. The current BUET benchmark covers one room. Room transfer, simultaneous multi-room sensing and ESP32 deployment have no measured performance here.
+Review the [audit of the original project](docs/original-experiment-review.md) and the [dataset catalog and two-room test plan](docs/occupancy-datasets.md) before interpreting performance. The BUET benchmark covers one room. The separate EHUNAM study evaluates transfer across four rooms. Physical ESP32-S3 validation remains open.
+
+See the [experiment handoff](docs/experiment-handoff.md) for HomeOccupancy group-fold results and offline inference.
+
+Open `dashboard/index.html` locally for the two-room replay, or see the [dashboard instructions](dashboard/README.md).

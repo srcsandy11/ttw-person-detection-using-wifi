@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Room occupancy replay</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="dashboard.js"></script>
+</head>
+<body>
+  <main>
+    <header class="page-header">
+      <div>
+        <div class="source" id="source">Simulator</div>
+        <h1>Room occupancy</h1>
+        <p id="description">Two rooms with simulated occupancy readings.</p>
+      </div>
+      <label class="file-control">
+        <span>Open replay</span>
+        <input id="file" type="file" accept="application/json,.json">
+      </label>
+    </header>
+    <p id="file-error" role="alert" hidden></p>
+
+    <section class="panel" aria-label="Playback controls">
+      <div class="playback-top">
+        <div class="playback-buttons">
+          <button id="play" type="button">Play</button>
+          <button id="reset" type="button">Reset</button>
+        </div>
+        <output id="time" for="position"></output>
+      </div>
+      <label for="position" class="sr-only">Replay position</label>
+      <input id="position" type="range" min="0" max="0" value="0">
+      <div class="scale"><span id="first-time"></span><span id="last-time"></span></div>
+    </section>
+
+    <section class="rooms" id="rooms" aria-label="Room states"></section>
+
+    <section class="panel history" aria-labelledby="history-title">
+      <h2 id="history-title">Recent readings</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Time</th><th scope="col">Room</th><th scope="col">State</th><th scope="col">Occupancy probability</th></tr></thead>
+          <tbody id="history"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
