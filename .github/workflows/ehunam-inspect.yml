@@ -1,0 +1,52 @@
+name: EHUNAM cross-day count experiment
+on:
+  push:
+    branches: [experiment/ehunam-inspection]
+    paths: [.github/workflows/ehunam-inspect.yml]
+jobs:
+  count:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - run: pip install requests remotezip pandas openpyxl scipy scikit-learn zipfile64
+      - name: Cross-day evaluation
+        run: |
+          python - <<'PY'
+          import io, requests, pandas as pd, numpy as np, scipy.io as sio
+          import zipfile64.zipfile
+          from remotezip import RemoteZip
+          from sklearn.ensemble import RandomForestClassifier
+          from sklearn.metrics import accuracy_score, balanced_accuracy_score, mean_absolute_error, confusion_matrix
+          files=requests.get("https://api.figshare.com/v2/articles/28541225",timeout=60).json()["files"]
+          x=next(f for f in files if f["name"]=="Summary.xlsx")
+          zf=next(f for f in files if f["name"]=="EHUNAM.zip")
+          df=pd.read_excel(io.BytesIO(requests.get(x["download_url"],timeout=60).content))
+          df=df[(df.Enviroment=="Basement Room") & (df.Application.isin(["PC","E"])) & (df.Rx==1) & (df.N_People<=4)]
+          print("SELECTION",df.groupby(["Date","N_People"]).size().to_string(),flush=True)
+          samples=[]
+          with RemoteZip(zf["download_url"],timeout=120) as z:
+              for i,row in enumerate(df.itertuples()):
+                  m=sio.loadmat(io.BytesIO(z.read(row.File)))
+                  c=np.abs(m["CSI"].astype(np.complex128))
+                  c=c[:, np.any(c != 0, axis=0)]
+                  scale=np.maximum(np.mean(c,axis=1,keepdims=True),1e-12)
+                  c=c/scale
+                  if c.shape[0]<10 or not np.isfinite(c).all(): continue
+                  # Global distribution of normalized per-packet amplitude and temporal differences.
+                  d=np.abs(np.diff(c,axis=0))
+                  feat=np.r_[np.quantile(c,[.05,.25,.5,.75,.95]),np.std(c),np.quantile(d,[.25,.5,.75,.95]),np.mean(d),np.std(d)]
+                  samples.append((str(row.Date.date()),int(row.N_People),row.Original_File,feat))
+                  if i%25==0: print("LOADED",i,flush=True)
+          days=sorted(set(s[0] for s in samples))
+          assert len(days)==2,days
+          for train,test in [days,days[::-1]]:
+              tr=[s for s in samples if s[0]==train]; te=[s for s in samples if s[0]==test]
+              assert not set(s[2] for s in tr)&set(s[2] for s in te)
+              X=np.array([s[3] for s in tr]); y=np.array([s[1] for s in tr])
+              Xt=np.array([s[3] for s in te]); yt=np.array([s[1] for s in te])
+              model=RandomForestClassifier(n_estimators=200,min_samples_leaf=3,random_state=42,n_jobs=-1)
+              model.fit(X,y); pred=model.predict(Xt)
+              baseline=np.full_like(yt,np.bincount(y).argmax())
+              print("RESULT",train,test,"n",len(tr),len(te),"accuracy",accuracy_score(yt,pred),"balanced_accuracy",balanced_accuracy_score(yt,pred),"mae",mean_absolute_error(yt,pred),"majority_accuracy",accuracy_score(yt,baseline),flush=True)
+              print("CONFUSION",confusion_matrix(yt,pred,labels=[0,1,2,3,4]).tolist(),flush=True)
+          PY
