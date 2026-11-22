@@ -7,11 +7,12 @@ jobs:
   inspect:
     runs-on: ubuntu-latest
     steps:
-      - run: pip install requests remotezip pandas openpyxl scipy h5py
+      - run: pip install requests remotezip pandas openpyxl scipy h5py zipfile64
       - name: Inspect recordings
         run: |
           python - <<'PY'
           import io, requests, pandas as pd, scipy.io as sio
+          import zipfile64.zipfile
           from remotezip import RemoteZip
           files=requests.get("https://api.figshare.com/v2/articles/28541225").json()["files"]
           x=next(f for f in files if f["name"]=="Summary.xlsx")
