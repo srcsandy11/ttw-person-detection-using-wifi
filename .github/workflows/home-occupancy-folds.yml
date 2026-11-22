@@ -32,8 +32,14 @@ jobs:
             done
           done
       - name: Train and evaluate three grouped folds
-        run: python -u benchmarks/home_occupancy_group_folds.py "${RUNNER_TEMP}/home-occupancy" home-occupancy-folds.json
+        run: python -u benchmarks/home_occupancy_group_folds.py "${RUNNER_TEMP}/home-occupancy" home-occupancy-folds.json --model-output home-occupancy-fold3.joblib
+      - name: Verify exported model inference
+        run: |
+          python benchmarks/predict_home_occupancy.py "${RUNNER_TEMP}/home-occupancy/work_3.csv" home-occupancy-fold3.joblib predictions.json
+          python -c 'import json; p=json.load(open("predictions.json")); assert len(p["windows"]) == 755; assert sum(w["occupied"] for w in p["windows"]) == 597'
       - uses: actions/upload-artifact@v4
         with:
           name: home-occupancy-group-folds
-          path: home-occupancy-folds.json
+          path: |
+            home-occupancy-folds.json
+            home-occupancy-fold3.joblib
