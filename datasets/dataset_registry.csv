@@ -10,3 +10,4 @@ wimans,public,Multi-person activity reference,https://github.com/huangshk/WiMANS
 ehunam,public,Room-level counting and occupancy,https://doi.org/10.6084/m9.figshare.28541225
 buet,public,Single-link static and moving occupancy,https://github.com/Tahmid-Mahmud-Fahim/esp32-based-presence-and-motion-detection-using-wifi
 homeoccupancy,public,Session-grouped occupancy baseline,https://huggingface.co/datasets/gadgadgad/HomeOccupancy
+esp32-nlos-activities,public,Secondary Wi-Fi activity baseline with router TX and ESP32 RX,https://doi.org/10.17632/x4x5xttvwt.1

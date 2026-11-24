@@ -1,0 +1,18 @@
+trial_folder,room_activity,corridor_activity,frames,rssi_mean_dbm,rssi_sd_db
+room-1/session-01/01_empty_01,empty,not independently logged,1490,-58.233,4.108
+room-1/session-01/02_seated_01,seated,not independently logged,1485,-53.758,2.246
+room-1/session-01/03_walking_01,walking,not independently logged,1496,-54.841,2.671
+room-2/session-01/01_3m_corridor_walking,empty,one person walking,1499,-52.164,1.09
+room-2/session-01/02_3m_corridor_empty,empty,empty,1499,-54.083,1.404
+room-2/session-01/03_4m_corridor_empty,empty,empty,1501,-57.261,1.499
+room-2/session-01/04_2m_corridor_empty,empty,empty,1499,-52.67,1.07
+room-2/session-01/05_4m_corridor_walking,empty,one person walking,1493,-58.447,1.88
+room-2/session-01/06_2m_corridor_walking,empty,one person walking,1495,-49.305,0.778
+room-2/session-02/01_3m_seated_corridor_empty,one person seated,empty,1500,-42.213,0.422
+room-2/session-02/02_4m_seated_corridor_empty,one person seated,empty,1499,-50.565,0.517
+room-2/session-02/03_2m_seated_some_movement_corridor_empty,one person seated with some movement,empty,1500,-43.47,0.96
+room-2/session-02/04_2m_seated_stationary_corridor_empty,one person seated stationary,empty,1500,-42.273,0.599
+room-2/session-02/05_3m_seated_corridor_walking,one person seated,one person walking,1500,-49.775,1.122
+room-2/session-02/06_4m_seated_corridor_walking,one person seated,one person walking,1500,-50.364,0.829
+room-2/session-02/07_2m_seated_corridor_walking,one person seated,one person walking,1500,-44.286,0.791
+room-2/session-02/08_3m_indoor_walking_corridor_empty,one person walking in a straight line across the TX-RX span,empty,1498,-48.928,1.46
