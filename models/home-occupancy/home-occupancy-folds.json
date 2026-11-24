@@ -1,0 +1,163 @@
+{
+  "dataset": "gadgadgad/HomeOccupancy",
+  "revision": "6eda463a036aa3d8b471522fb3d8828a1c2866ee",
+  "window_packets": 256,
+  "model": "random forest, 300 trees, max_depth 12, min_samples_leaf 8, balanced classes",
+  "seed": 42,
+  "threshold": 0.5,
+  "evaluation": "three exploratory group folds; each holds out one full recording per class",
+  "caveat": "Only nine recordings in one room; windows within recordings are correlated. Fold 3 was previously used as a test set; this is not a fresh independent test. Session numbers across labels may not be aligned by day or person. Results are binary presence, not person counting, through-wall localization, or live validation.",
+  "folds": [
+    {
+      "held_out_session_number": 1,
+      "training_windows": 4315,
+      "test_windows": 1965,
+      "metrics": {
+        "accuracy": 0.9969465648854962,
+        "balanced_accuracy": 0.9975267930750207,
+        "occupied_precision": 1.0,
+        "occupied_recall": 0.9950535861500412,
+        "occupied_f1": 0.9975206611570248,
+        "roc_auc": 0.9999945186016734,
+        "average_precision": 0.9999966023584641,
+        "confusion_matrix_empty_occupied": [
+          [
+            752,
+            0
+          ],
+          [
+            6,
+            1207
+          ]
+        ]
+      },
+      "per_session": {
+        "empty_1.csv": {
+          "label": 0,
+          "windows": 752,
+          "correct": 752,
+          "predicted_occupied_fraction": 0.0
+        },
+        "sleep_1.csv": {
+          "label": 1,
+          "windows": 747,
+          "correct": 747,
+          "predicted_occupied_fraction": 1.0
+        },
+        "work_1.csv": {
+          "label": 1,
+          "windows": 466,
+          "correct": 460,
+          "predicted_occupied_fraction": 0.9871244635193133
+        }
+      }
+    },
+    {
+      "held_out_session_number": 2,
+      "training_windows": 4139,
+      "test_windows": 2141,
+      "metrics": {
+        "accuracy": 0.9869219990658571,
+        "balanced_accuracy": 0.9849751422124018,
+        "occupied_precision": 0.9894810659186536,
+        "occupied_recall": 0.9908707865168539,
+        "occupied_f1": 0.9901754385964913,
+        "roc_auc": 0.9993545594157931,
+        "average_precision": 0.9996737301430915,
+        "confusion_matrix_empty_occupied": [
+          [
+            702,
+            15
+          ],
+          [
+            13,
+            1411
+          ]
+        ]
+      },
+      "per_session": {
+        "empty_2.csv": {
+          "label": 0,
+          "windows": 717,
+          "correct": 702,
+          "predicted_occupied_fraction": 0.02092050209205021
+        },
+        "sleep_2.csv": {
+          "label": 1,
+          "windows": 738,
+          "correct": 738,
+          "predicted_occupied_fraction": 1.0
+        },
+        "work_2.csv": {
+          "label": 1,
+          "windows": 686,
+          "correct": 673,
+          "predicted_occupied_fraction": 0.9810495626822158
+        }
+      }
+    },
+    {
+      "held_out_session_number": 3,
+      "training_windows": 4106,
+      "test_windows": 2174,
+      "metrics": {
+        "accuracy": 0.9268629254829807,
+        "balanced_accuracy": 0.9453340260140075,
+        "occupied_precision": 0.9992348890589136,
+        "occupied_recall": 0.8920765027322405,
+        "occupied_f1": 0.9426199927823891,
+        "roc_auc": 0.9997431309166475,
+        "average_precision": 0.9998664438481143,
+        "confusion_matrix_empty_occupied": [
+          [
+            709,
+            1
+          ],
+          [
+            158,
+            1306
+          ]
+        ]
+      },
+      "per_session": {
+        "empty_3.csv": {
+          "label": 0,
+          "windows": 710,
+          "correct": 709,
+          "predicted_occupied_fraction": 0.0014084507042253522
+        },
+        "sleep_3.csv": {
+          "label": 1,
+          "windows": 709,
+          "correct": 709,
+          "predicted_occupied_fraction": 1.0
+        },
+        "work_3.csv": {
+          "label": 1,
+          "windows": 755,
+          "correct": 597,
+          "predicted_occupied_fraction": 0.7907284768211921
+        }
+      }
+    }
+  ],
+  "pooled_out_of_fold": {
+    "accuracy": 0.9692675159235669,
+    "balanced_accuracy": 0.9747484886827881,
+    "occupied_precision": 0.9959390862944163,
+    "occupied_recall": 0.9568397951719093,
+    "occupied_f1": 0.9759980101977366,
+    "roc_auc": 0.9991541032705731,
+    "average_precision": 0.999543316015606,
+    "confusion_matrix_empty_occupied": [
+      [
+        2163,
+        16
+      ],
+      [
+        177,
+        3924
+      ]
+    ]
+  }
+}
