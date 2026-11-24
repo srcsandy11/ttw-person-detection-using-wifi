@@ -2,9 +2,8 @@
 
 import argparse
 import hashlib
-import shutil
+import subprocess
 import tempfile
-import urllib.request
 from pathlib import Path
 
 
@@ -48,14 +47,27 @@ def main():
             else:
                 with tempfile.TemporaryDirectory(dir=args.directory) as temporary:
                     candidate = Path(temporary) / name
-                    with urllib.request.urlopen(
-                        f"{SOURCE}/{name}/content", timeout=60
-                    ) as response, candidate.open("wb") as archive:
-                        shutil.copyfileobj(response, archive)
+                    subprocess.run(
+                        [
+                            "curl",
+                            "--fail",
+                            "--location",
+                            "--silent",
+                            "--show-error",
+                            "--retry",
+                            "2",
+                            "--max-time",
+                            "120",
+                            "--output",
+                            str(candidate),
+                            f"{SOURCE}/{name}/content",
+                        ],
+                        check=True,
+                    )
                     verify(candidate, size, sha256)
                     candidate.replace(destination)
             print(f"Verified {destination}")
-    except (OSError, ValueError) as error:
+    except (OSError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"{error}\n")
 
 

@@ -6,7 +6,7 @@ The [Zenodo metadata](https://zenodo.org/api/records/8021099) specifies [CC BY 4
 
 ## Download and verify
 
-From the repository root, run:
+For the download, install Python 3 and curl. From the repository root, run
 
 ```sh
 python3 datasets/public/tu-wien-presence/download.py /path/to/tu-wien-presence
