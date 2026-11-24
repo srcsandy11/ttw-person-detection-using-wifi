@@ -1,0 +1,18 @@
+room,session,trial_order,room_activity,corridor_activity,estimated_spacing_m,frames,trial_folder
+room-1,session-01,1,empty,not independently logged,,1490,room-1/session-01/01_empty_01
+room-1,session-01,2,seated,not independently logged,,1485,room-1/session-01/02_seated_01
+room-1,session-01,3,walking,not independently logged,,1496,room-1/session-01/03_walking_01
+room-2,session-01,1,empty,one person walking,3,1499,room-2/session-01/01_3m_corridor_walking
+room-2,session-01,2,empty,empty,3,1499,room-2/session-01/02_3m_corridor_empty
+room-2,session-01,3,empty,empty,4,1501,room-2/session-01/03_4m_corridor_empty
+room-2,session-01,4,empty,empty,2,1499,room-2/session-01/04_2m_corridor_empty
+room-2,session-01,5,empty,one person walking,4,1493,room-2/session-01/05_4m_corridor_walking
+room-2,session-01,6,empty,one person walking,2,1495,room-2/session-01/06_2m_corridor_walking
+room-2,session-02,1,one person seated,empty,3,1500,room-2/session-02/01_3m_seated_corridor_empty
+room-2,session-02,2,one person seated,empty,4,1499,room-2/session-02/02_4m_seated_corridor_empty
+room-2,session-02,3,one person seated with some movement,empty,2,1500,room-2/session-02/03_2m_seated_some_movement_corridor_empty
+room-2,session-02,4,one person seated stationary,empty,2,1500,room-2/session-02/04_2m_seated_stationary_corridor_empty
+room-2,session-02,5,one person seated,one person walking,3,1500,room-2/session-02/05_3m_seated_corridor_walking
+room-2,session-02,6,one person seated,one person walking,4,1500,room-2/session-02/06_4m_seated_corridor_walking
+room-2,session-02,7,one person seated,one person walking,2,1500,room-2/session-02/07_2m_seated_corridor_walking
+room-2,session-02,8,one person walking in a straight line across the TX-RX span,empty,3,1498,room-2/session-02/08_3m_indoor_walking_corridor_empty
