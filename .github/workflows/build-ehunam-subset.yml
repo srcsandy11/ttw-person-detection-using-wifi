@@ -1,0 +1,88 @@
+name: Build EHUNAM redistributable subset
+on:
+  push:
+    branches: [experiment/ehunam-inspection]
+    paths: [.github/workflows/build-ehunam-subset.yml]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dataset/ehunam-public-subset
+      - run: pip install numpy scipy pandas openpyxl requests remotezip zipfile64
+      - name: Retrieve and verify labeled CSI
+        run: |
+          python - <<'PY'
+          import hashlib, io, json
+          from pathlib import Path
+          import numpy as np, pandas as pd, requests, scipy.io as sio
+          import zipfile64.zipfile
+          from remotezip import RemoteZip
+          api="https://api.figshare.com/v2/articles/28541225"
+          response=requests.get(api,timeout=60); response.raise_for_status()
+          files=response.json()["files"]
+          meta=next(f for f in files if f["name"]=="Summary.xlsx")
+          archive=next(f for f in files if f["name"]=="EHUNAM.zip")
+          response=requests.get(meta["download_url"],timeout=60); response.raise_for_status()
+          df=pd.read_excel(io.BytesIO(response.content))
+          df=df[(df.Enviroment=="Basement Room") & (df.Application.isin(["PC","E"])) & (df.Rx==1) & (df.N_People<=4)].copy()
+          df=df.sort_values(["Date","N_People","File"]).drop_duplicates(["Date","Original_File"])
+          selected=df.groupby(["Date","N_People"],group_keys=False).head(3)
+          assert len(selected)==30, selected.groupby(["Date","N_People"]).size()
+          assert set(selected.N_People)=={0,1,2,3,4}
+          assert len(set(selected.Date))==2
+          assert selected.Original_File.is_unique, "capture appears more than once"
+          root=Path("datasets/public/ehunam-basement-30")
+          (root/"csi").mkdir(parents=True,exist_ok=True)
+          output=[]
+          with RemoteZip(archive["download_url"],timeout=120) as z:
+              for i,row in enumerate(selected.itertuples(index=False)):
+                  blob=z.read(row.File)
+                  mat=sio.loadmat(io.BytesIO(blob))
+                  csi=mat["CSI"]
+                  assert csi.ndim==2 and np.iscomplexobj(csi)
+                  assert int(mat["N_People"].item())==int(row.N_People)
+                  assert int(mat["Rx"].item())==1
+                  assert np.isfinite(csi).all()
+                  sample=f"sample_{i:03d}"
+                  path=root/"csi"/f"{sample}.npz"
+                  np.savez_compressed(path,csi=csi.astype(np.complex64))
+                  with np.load(path,allow_pickle=False) as check:
+                      assert check["csi"].shape==csi.shape
+                      assert np.allclose(check["csi"],csi,rtol=1e-6,atol=1e-7)
+                  output.append({"sample":sample,"path":f"csi/{sample}.npz",
+                      "count":int(row.N_People),"occupied":int(row.N_People>0),
+                      "summary_date":row.Date.strftime("%Y-%m-%d"),
+                      "environment":row.Enviroment,"rx":int(row.Rx),
+                      "source_mat_file":row.File,
+                      "source_recording":row.Original_File,
+                      "source_mat_sha256":hashlib.sha256(blob).hexdigest(),
+                      "sha256":hashlib.sha256(path.read_bytes()).hexdigest(),
+                      "packets":int(csi.shape[0]),"subcarriers":int(csi.shape[1])})
+                  print("SAVED",i,row.File,flush=True)
+          pd.DataFrame(output).to_csv(root/"labels.csv",index=False)
+          assert pd.DataFrame(output).groupby(["summary_date","count"]).size().eq(3).all()
+          readme="""# EHUNAM basement CSI subset (30 captures)
+
+This subset contains 30 individual complex CSI matrices from EHUNAM, with 3 recordings for each count 0–4 on each of two dates in the supplied summary metadata. One receiver (Rx 1) and one basement room are included. Each .npz file contains one complex64 matrix named csi (packets × subcarriers); labels.csv supplies counts, binary occupancy, source names, dimensions, and SHA-256 checksums. Source matrices were converted from complex128 to complex64; each output was reloaded and numerically checked.
+
+Source: de Armas et al., *EHUNAM, a WiFi CSI-based dataset for human and machine sensing*, Scientific Data 12 (2025), https://doi.org/10.1038/s41597-025-06238-4. Dataset: https://doi.org/10.6084/m9.figshare.28541225. Licensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/. This is a selected and precision-converted derivative; no claims are made that it represents the full dataset.
+
+The metadata dates below are copied from Summary.xlsx and do not consistently match dates embedded in source filenames. Treat date-based separation as provisional. Samples from one room, a small number of controlled captures and a single receiver do not establish performance in new rooms or hardware. Preserve complete source recordings as grouping units; never split packets from one recording across train and test. There are only 3 captures per count/date; this is a development subset, not a representative benchmark.
+
+To load: `numpy.load("csi/sample_000.npz", allow_pickle=False)["csi"]` (relative to this directory). Verify checksums using labels.csv.
+"""
+          (root/"README.md").write_text(readme,encoding="utf8")
+          print("VERIFIED",len(output), "counts",pd.DataFrame(output).groupby(["summary_date","count"]).size().to_dict(),flush=True)
+          PY
+      - name: Commit dataset subset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add datasets/public/ehunam-basement-30
+          git commit -m "Add attributed EHUNAM CSI count subset"
+          git push origin HEAD:dataset/ehunam-public-subset
