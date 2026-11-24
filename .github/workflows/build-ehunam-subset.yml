@@ -45,7 +45,7 @@ jobs:
                   mat=sio.loadmat(io.BytesIO(blob))
                   csi=mat["CSI"]
                   assert csi.ndim==2 and np.iscomplexobj(csi)
-                  assert int(mat["N_People"].item())==int(row.N_People)
+                  assert (int(mat["N_People"].item()) if mat["N_People"].size else 0)==int(row.N_People)
                   assert int(mat["Rx"].item())==1
                   assert np.isfinite(csi).all()
                   sample=f"sample_{i:03d}"
