@@ -2,6 +2,16 @@
 
 This repository evaluates whether a single Wi-Fi transmitter–receiver link can distinguish an empty room from an occupied room using public CSI recordings. The reference hardware for the student project is a pair of 7Semi ESP32-S3 DevKitC-1 N8R2 boards.
 
+## Find project files
+
+| Need | Location |
+| --- | --- |
+| Public, team-collected and simulated datasets | [Datasets](datasets/README.md) |
+| Fitted models and inference instructions | [Models](models/) |
+| Reproduce training | [HomeOccupancy benchmarks](benchmarks/), [BUET RX1](wifi_benchmark/), [experiment workflows](.github/workflows/) |
+| Test results and limitations | [Experiment handoff](docs/experiment-handoff.md) |
+| Run the dashboard locally | [Replay instructions](dashboard/README.md) |
+
 ## Reproduce the RX1 experiment
 
 From the repository root, run:

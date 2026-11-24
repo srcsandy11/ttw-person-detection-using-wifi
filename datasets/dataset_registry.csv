@@ -1,0 +1,12 @@
+id,category,use,source
+classroom-csi,custom,Team pilot recordings and ground truth,custom/classroom-csi/index.csv
+room-simulation,synthetic,Dashboard development,synthetic/
+tu-wien-presence,public,Binary presence spectrograms,https://zenodo.org/records/8021099
+wallhack,public,Activity research reference,https://zenodo.org/records/13950918
+esp32-presence,public,Presence and movement labels,https://data.mendeley.com/datasets/zycty7ksky/1
+wicount,public,Indoor people counting,https://huggingface.co/datasets/RS2002/WiCount
+wimans,public,Multi-person activity reference,https://github.com/huangshk/WiMANS
+3do,public,Single-person research reference,https://zenodo.org/records/10925351
+ehunam,public,Room-level counting and occupancy,https://doi.org/10.6084/m9.figshare.28541225
+buet,public,Single-link static and moving occupancy,https://github.com/Tahmid-Mahmud-Fahim/esp32-based-presence-and-motion-detection-using-wifi
+homeoccupancy,public,Session-grouped occupancy baseline,https://huggingface.co/datasets/gadgadgad/HomeOccupancy
