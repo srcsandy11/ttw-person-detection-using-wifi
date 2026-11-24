@@ -1,0 +1,131 @@
+{
+  "source": "simulated",
+  "rooms": [
+    {
+      "id": "room-a",
+      "name": "Room A",
+      "length_m": 7,
+      "width_m": 5
+    },
+    {
+      "id": "room-b",
+      "name": "Room B",
+      "length_m": 6,
+      "width_m": 4
+    }
+  ],
+  "readings": [
+    {
+      "room_id": "room-a",
+      "observed_at": "2026-01-01T09:00:00+00:00",
+      "occupied": false,
+      "occupant_count": 0,
+      "movement": "none"
+    },
+    {
+      "room_id": "room-b",
+      "observed_at": "2026-01-01T09:00:00+00:00",
+      "occupied": false,
+      "occupant_count": 0,
+      "movement": "none"
+    },
+    {
+      "room_id": "room-a",
+      "observed_at": "2026-01-01T09:00:30+00:00",
+      "occupied": true,
+      "occupant_count": 1,
+      "movement": "moving"
+    },
+    {
+      "room_id": "room-b",
+      "observed_at": "2026-01-01T09:00:30+00:00",
+      "occupied": false,
+      "occupant_count": 0,
+      "movement": "none"
+    },
+    {
+      "room_id": "room-a",
+      "observed_at": "2026-01-01T09:01:00+00:00",
+      "occupied": true,
+      "occupant_count": 1,
+      "movement": "still"
+    },
+    {
+      "room_id": "room-b",
+      "observed_at": "2026-01-01T09:01:00+00:00",
+      "occupied": true,
+      "occupant_count": 1,
+      "movement": "moving"
+    },
+    {
+      "room_id": "room-a",
+      "observed_at": "2026-01-01T09:01:30+00:00",
+      "occupied": true,
+      "occupant_count": 2,
+      "movement": "moving"
+    },
+    {
+      "room_id": "room-b",
+      "observed_at": "2026-01-01T09:01:30+00:00",
+      "occupied": true,
+      "occupant_count": 1,
+      "movement": "still"
+    },
+    {
+      "room_id": "room-a",
+      "observed_at": "2026-01-01T09:02:00+00:00",
+      "occupied": true,
+      "occupant_count": 1,
+      "movement": "moving"
+    },
+    {
+      "room_id": "room-b",
+      "observed_at": "2026-01-01T09:02:00+00:00",
+      "occupied": true,
+      "occupant_count": 2,
+      "movement": "moving"
+    },
+    {
+      "room_id": "room-a",
+      "observed_at": "2026-01-01T09:02:30+00:00",
+      "occupied": false,
+      "occupant_count": 0,
+      "movement": "none"
+    },
+    {
+      "room_id": "room-b",
+      "observed_at": "2026-01-01T09:02:30+00:00",
+      "occupied": true,
+      "occupant_count": 3,
+      "movement": "still"
+    },
+    {
+      "room_id": "room-a",
+      "observed_at": "2026-01-01T09:03:00+00:00",
+      "occupied": false,
+      "occupant_count": 0,
+      "movement": "none"
+    },
+    {
+      "room_id": "room-b",
+      "observed_at": "2026-01-01T09:03:00+00:00",
+      "occupied": true,
+      "occupant_count": 2,
+      "movement": "moving"
+    },
+    {
+      "room_id": "room-a",
+      "observed_at": "2026-01-01T09:03:30+00:00",
+      "occupied": false,
+      "occupant_count": 0,
+      "movement": "none"
+    },
+    {
+      "room_id": "room-b",
+      "observed_at": "2026-01-01T09:03:30+00:00",
+      "occupied": false,
+      "occupant_count": 0,
+      "movement": "none"
+    }
+  ]
+}
