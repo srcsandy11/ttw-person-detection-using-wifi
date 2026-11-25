@@ -1,0 +1,14 @@
+{
+  "recording_id": "a2dca4ff-20fcda2e11ec3e1983c1c30d69ac315dddf2aa52e4ea09fe14e3c1ba4c13b6e2",
+  "sha256": "20fcda2e11ec3e1983c1c30d69ac315dddf2aa52e4ea09fe14e3c1ba4c13b6e2",
+  "frames": 1314,
+  "label": "empty",
+  "bytes": 235206,
+  "slot": 0,
+  "downloaded_utc": "2026-11-25T13:11:18.084105+00:00",
+  "seconds_requested": 30,
+  "status": "complete",
+  "host_timebase": "elapsed from first RX timestamp (standalone mode)",
+  "protocol_version": 1,
+  "source": "standalone_rx"
+}

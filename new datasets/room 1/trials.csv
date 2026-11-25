@@ -1,0 +1,8 @@
+slot,recording_id_prefix,indoor_activity,people_inside,corridor,windows,tx_position,rx_position,spacing_m,reported_height_cm
+0,bd840e8c,empty,0,empty,closed,door,wall,3,100
+1,4d19d0c9,seated,1,people walked past,closed,door,wall,3,100
+2,4c3cbe14,seated repeat,1,empty,closed,door,wall,3,100
+3,5e5acaba,standing,1,empty,closed,door,wall,3,100
+4,f4d14194,walking parallel 1 m from wall,1,empty,closed,door,wall,3,100
+5,3c4a9311,walking perpendicular from room end to 1 m from wall,1,empty,closed,door,wall,3,100
+6,7df9c4d2,walking mixed fixed path parallel at 1 m and perpendicular to room end,1,empty,closed,door,wall,3,100
